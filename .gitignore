@@ -87,6 +87,10 @@ venv.bak/
 # mkdocs documentation 
 /site 
 
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+
 # mypy 
 .mypy_cache/ 
 
