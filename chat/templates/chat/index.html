@@ -1,17 +1,58 @@
-{% extends "base.html" %} {% block content %} {% if request.user.is_authenticated%} {% for message in messages %}
-<div>[{{message.created_at}}] {{message.author}}: {{ message.text }}</div>
-{% endfor %}
+{% extends "base.html" %} {% block content %}
 
-<form action="/chat/" method="post">
+<script>
+  async function sendMessage() {
+    let fd = new FormData();
+    let token = "{{ csrf_token }}";
+    fd.append("textmessage", messageField.value);
+    fd.append("csrfmiddlewaretoken", token);
+    try {
+      messageContainer.innerHTML += `
+      <div id="deleteMessage">
+        <span class="grey-text"> [Datum] </span> {{request.user}} <i class="grey-text"> ${messageField.value} </i>
+      </div> 
+      `;
+
+      let response = await fetch("/chat/", {
+        method: "POST",
+        body: fd,
+      });
+
+      let json = await response.json();
+      console.log("json is", json);
+
+      document.getElementById("deleteMessage").remove();
+
+      messageContainer.innerHTML += `
+      <div>
+        <span> [Datum] </span> {{request.user}} <i> ${messageField.value} </i>
+      </div> 
+      `;
+
+      console.log("messagse send");
+    } catch (e) {
+      console.error("An error eccoured", e);
+    }
+  }
+</script>
+
+{% if request.user.is_authenticated%}
+<div id="messageContainer">
+  {% for message in messages %}
+  <div>[{{message.created_at}}] {{message.author}}: {{ message.text }}</div>
+  {% endfor %}
+</div>
+
+<form onsubmit="sendMessage(); return false" method="post">
   {% csrf_token %}
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     <input
       class="mdl-textfield__input"
       name="textmessage"
       type="text"
-      id="sample3"
+      id="messageField"
     />
-    <label class="mdl-textfield__label" for="sample3">Text...</label>
+    <label class="mdl-textfield__label" for="messageField">Text...</label>
   </div>
   <button
     class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
