@@ -8,7 +8,8 @@ from django.contrib.auth.forms import *
 from .forms import RegistrationForm
 from django.http import JsonResponse
 from django.core import serializers
-
+from django.contrib.auth import logout
+from django.urls import reverse
 
 # Create your views here.
 
@@ -54,3 +55,9 @@ def sign_up(request):
             print(form.errors)
             
     return render(request, 'register/register.html', {'form':form,})
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)  
+        return redirect('login')
+     

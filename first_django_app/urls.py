@@ -17,14 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from chat.views import index, login__view, sign_up
+from chat.views import index, login__view, sign_up, logout_view
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat/', index),
-    path('login/', login__view),
-    path('register/', include('django.contrib.auth.urls')),
-    path('register/', sign_up, name = 'sign_up'), 
+    path('login/', login__view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('register/', sign_up, name='sign_up'), 
+    path('', include('django.contrib.auth.urls')),
+
 ]
