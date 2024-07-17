@@ -137,11 +137,40 @@ height: 100%;
 }
 
 .d-none{
-  display: none;
+  display: none !important;
 }
 
 .return-btn{
   position: absolute;
   top: 40px;
   right: 80px;
+}
+
+.pw-req-box{
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  flex-direction: column;
+  border: 1px solid #3F51B5;
+  border-radius: 8px;
+  padding: 8px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  max-width: 300px;
+  margin: 40px 0;
+}
+
+.pw-req-text{
+  text-overflow: clip;
+}
+
+h4{
+  margin: 0;
+}
+
+.show {
+  display: block; /* Sicherstellen, dass das Element angezeigt wird */
+  opacity: 1;
+  transform: scale(1);
 }

@@ -2,12 +2,12 @@
 
 <div class="submit-btn return-btn">
   <a href="/login/">
-  <button
-    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-  >
-    Back to Login
-  </button>
-</a>
+    <button
+      class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+    >
+      Back to Login
+    </button>
+  </a>
 </div>
 
 <form method="post">
@@ -31,6 +31,7 @@
         id="password"
         name="password1"
         onkeyup="passwordDontMatch()"
+        onfocus="showPwReq()"
       />
       <label class="mdl-textfield__label" for="password1">Password</label>
     </div>
@@ -46,6 +47,7 @@
         id="password_confirm"
         name="password2"
         onkeyup="passwordDontMatch()"
+        onfocus="showPwReq()"
       />
       <label class="mdl-textfield__label" for="password2"
         >Repeat password</label
@@ -55,7 +57,13 @@
     <span id="passwordDontMatchConfirm" class="password-dont-match d-none"
       >Password dont match</span
     >
-
+    <div class="pw-req-box d-none" id="PwReqBox">
+      <h4>Password requirements:</h4>
+      <span class="pw-req-text"
+        >The password requires at least 8 characters and must not be the same as
+        the user name.</span
+      >
+    </div>
     <div class="submit-btn">
       <button
         class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
@@ -81,6 +89,21 @@
     } else {
       dontMatch.classList.add("d-none");
       dontMatchConfirm.classList.add("d-none");
+    }
+  }
+
+  function showPwReq() {
+    let container = document.getElementById("PwReqBox");
+    if (container.classList.contains("d-none")) {
+      container.classList.remove("d-none");
+      setTimeout(function () {
+        container.classList.add("show");
+      }, 10);
+    } else {
+      container.classList.remove("show");
+      setTimeout(function () {
+        container.classList.add("d-none");
+      }, 500);
     }
   }
 </script>
