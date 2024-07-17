@@ -7,43 +7,104 @@
     fd.append("textmessage", messageField.value);
     fd.append("csrfmiddlewaretoken", token);
     try {
-      messageContainer.innerHTML += `
-      <div id="deleteMessage">
-        <span class="grey-text"> [Datum] </span> {{request.user}} <i class="grey-text"> ${messageField.value} </i>
-      </div> 
-      `;
+      messageContainer.innerHTML += messageHTMLDelete();
 
       let response = await fetch("/chat/", {
         method: "POST",
         body: fd,
       });
 
-      let json = await response.json();
-      console.log("json is", json);
+      let responseAsJson = await response.json();
+      let jsonParseObject = JSON.parse(responseAsJson);
+      let messageText = jsonParseObject.fields.text;
+      let hours = getMessageHours(jsonParseObject);
+      let minutes = getMessageMinutes(jsonParseObject);
 
       document.getElementById("deleteMessage").remove();
 
-      messageContainer.innerHTML += `
-      <div>
-        <span> [Datum] </span> {{request.user}} <i> ${messageField.value} </i>
-      </div> 
-      `;
+      messageContainer.innerHTML += messageHTML(messageText, hours, minutes);
 
-      console.log("messagse send");
     } catch (e) {
       console.error("An error eccoured", e);
     }
   }
+
+  function getMessageHours(jsonParseObject){
+    let messageDateString = jsonParseObject.fields.created_at;
+    let messageDate = new Date(messageDateString);
+    let hours = messageDate.getHours();
+    return hours;
+  }
+
+  function getMessageMinutes(jsonParseObject){
+    let messageDateString = jsonParseObject.fields.created_at;
+    let messageDate = new Date(messageDateString);
+    let minutes = messageDate.getMinutes(); 
+    return minutes;
+  }
+
+  function messageHTMLDelete(){
+    return `
+    <div class="message-outbox-end" id="deleteMessage">
+      <div class="message-box-user">
+        <div class="message-name-container">{{request.user}}:</div>
+        <div class="message-text-container">${messageField.value}</div>
+        {% load tz %}
+        <div class="message-date-container">
+          {{message.created_at|date:'H:i'}}
+        </div>
+      </div>
+    </div>`;
+  }
+
+
+  function messageHTML(messageText, hours, minutes){
+    return `
+    <div class="message-outbox-end">
+      <div class="message-box-user">
+        <div class="message-name-container">{{request.user}}:</div>
+        <div class="message-text-container">${messageText}</div>
+        {% load tz %}
+        <div class="message-date-container">
+          ${hours}:${minutes}
+        </div>
+      </div>
+    </div>`;
+  }
 </script>
 
 {% if request.user.is_authenticated%}
-<div id="messageContainer">
-  {% for message in messages %}
-  <div>[{{message.created_at}}] {{message.author}}: {{ message.text }}</div>
-  {% endfor %}
+<div class="message-container" id="messageContainer">
+  {% for message in messages %} {% if request.user == message.author %}
+  <div class="message-outbox-end">
+    <div class="message-box-user">
+      <div class="message-name-container">{{message.author}}:</div>
+      <div class="message-text-container">{{message.text}}</div>
+      {% load tz %}
+      <div class="message-date-container">
+        {{message.created_at|date:'H:i'}}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="message-outbox-start">
+    <div class="message-box">
+      <div class="message-name-container">{{message.author}}:</div>
+      <div class="message-text-container">{{message.text}}</div>
+      {% load tz %}
+      <div class="message-date-container">
+        {{message.created_at|date:'H:i'}}
+      </div>
+    </div>
+  </div>
+  {% endif %} {% endfor %}
 </div>
 
-<form onsubmit="sendMessage(); return false" method="post">
+<form
+  onsubmit="sendMessage(); return false"
+  method="post"
+  class="send-message-container"
+>
   {% csrf_token %}
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
     <input

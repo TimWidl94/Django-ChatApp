@@ -36,6 +36,7 @@ def login__view(request):
         user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
         if user:
             login(request, user)
+            request.session['is_logged_in'] = True
             return HttpResponseRedirect(request.POST.get('redirect'))
         else:
             return render(request, 'login/index.html', {'wrongpassword': True, 'redirect': redirect})
@@ -49,15 +50,17 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            request.session['is_logged_in'] = True
             return redirect('/chat')
         else:
             form = RegistrationForm()
-            print(form.errors)
+            return render(request, 'register/register.html', {'password_dont_match': True,})
             
     return render(request, 'register/register.html', {'form':form,})
 
 def logout_view(request):
     if request.method == 'POST':
         logout(request)  
+        request.session['is_logged_in'] = False
         return redirect('login')
      

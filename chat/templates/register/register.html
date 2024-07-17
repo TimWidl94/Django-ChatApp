@@ -1,46 +1,88 @@
-{% extends "base.html" %} {% block content %} 
+{% extends "base.html" %} {% block content %}
 
+<div class="submit-btn return-btn">
+  <a href="/login/">
+  <button
+    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+  >
+    Back to Login
+  </button>
+</a>
+</div>
 
- <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <!-- <input type="hidden" name="redirect" value="{{ redirect }}" /> -->
-    <!-- <div class="login-box"> -->
-      <!-- <div class="mdl-textfield mdl-js-textfield"> -->
-        <!-- <input -->
-          <!-- class="mdl-textfield__input" -->
-          <!-- type="text" -->
-          <!-- id="username" -->
-          <!-- name="username" -->
-        <!-- /> -->
-        <!-- <label class="mdl-textfield__label" for="username">Username</label> -->
-      <!-- </div> -->
-<!--  -->
-      <!-- <div class="mdl-textfield mdl-js-textfield"> -->
-        <!-- <input -->
-          <!-- class="mdl-textfield__input" -->
-          <!-- type="password" -->
-          <!-- id="password" -->
-          <!-- name="password" -->
-        <!-- /> -->
-        <!-- <label class="mdl-textfield__label" for="password">Password</label> -->
-      <!-- </div> -->
-<!--  -->
-      <!-- <div class="mdl-textfield mdl-js-textfield"> -->
-        <!-- <input -->
-          <!-- class="mdl-textfield__input" -->
-          <!-- type="password" -->
-          <!-- id="password_confirm" -->
-          <!-- name="password_confirm" -->
-        <!-- /> -->
-        <!-- <label class="mdl-textfield__label" for="password_confirm">Repeat password</label> -->
-      <!-- </div> -->
-<!--  -->
-      <div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-          register
-        </button></div>
-    </div> 
-</form> 
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="redirect" value="{{ redirect }}" />
+  <div class="login-box">
+    <div class="mdl-textfield mdl-js-textfield">
+      <input
+        class="mdl-textfield__input"
+        type="text"
+        id="username"
+        name="username"
+      />
+      <label class="mdl-textfield__label" for="username">Username</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <input
+        class="mdl-textfield__input"
+        type="password"
+        id="password"
+        name="password1"
+        onkeyup="passwordDontMatch()"
+      />
+      <label class="mdl-textfield__label" for="password1">Password</label>
+    </div>
+
+    <span id="passwordDontMatch" class="password-dont-match d-none"
+      >Password dont match</span
+    >
+
+    <div class="mdl-textfield mdl-js-textfield">
+      <input
+        class="mdl-textfield__input"
+        type="password"
+        id="password_confirm"
+        name="password2"
+        onkeyup="passwordDontMatch()"
+      />
+      <label class="mdl-textfield__label" for="password2"
+        >Repeat password</label
+      >
+    </div>
+
+    <span id="passwordDontMatchConfirm" class="password-dont-match d-none"
+      >Password dont match</span
+    >
+
+    <div class="submit-btn">
+      <button
+        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+      >
+        register
+      </button>
+    </div>
+  </div>
+</form>
+
+<script>
+  function passwordDontMatch() {
+    let dontMatch = document.getElementById("passwordDontMatch");
+    let dontMatchConfirm = document.getElementById("passwordDontMatchConfirm");
+    let password = document.getElementById("password").value;
+    let passwordConfirm = document.getElementById("password_confirm").value;
+
+    console.log(password, passwordConfirm);
+
+    if (password !== passwordConfirm) {
+      dontMatch.classList.remove("d-none");
+      dontMatchConfirm.classList.remove("d-none");
+    } else {
+      dontMatch.classList.add("d-none");
+      dontMatchConfirm.classList.add("d-none");
+    }
+  }
+</script>
 
 {% endblock %}

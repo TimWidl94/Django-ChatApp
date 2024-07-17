@@ -28,7 +28,7 @@
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
           <nav class="mdl-navigation mdl-layout--large-screen-only">
-            {% if notLoggedIn %}
+            {% if request.session.is_logged_in %}
             <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}
               <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">
@@ -42,10 +42,14 @@
       <div class="mdl-layout__drawer">
         <span class="mdl-layout-title">Chatroom</span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
+          {% if request.session.is_logged_in %}
+            <form class="logout-navbar" method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">
+                Logout
+              </button>
+            </form>
+            {% endif %}
         </nav>
       </div>
       <main class="mdl-layout__content">
