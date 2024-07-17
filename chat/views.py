@@ -58,6 +58,7 @@ def sign_up(request):
             
     return render(request, 'register/register.html', {'form':form,})
 
+
 def logout_view(request):
     if request.method == 'POST':
         logout(request)  
