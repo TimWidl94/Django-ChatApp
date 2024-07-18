@@ -8,7 +8,7 @@
     fd.append("csrfmiddlewaretoken", token);
     try {
       messageContainer.innerHTML += messageHTMLDelete();
-
+      messageField.value = ``;
       let response = await fetch("/chat/", {
         method: "POST",
         body: fd,

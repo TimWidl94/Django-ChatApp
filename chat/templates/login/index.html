@@ -1,7 +1,5 @@
 {% extends "base.html" %} {% block content %}
 
-
-
 <form action="/login/" method="post">
   {% csrf_token %}
   <input type="hidden" name="redirect" value="{{ redirect }}" />
@@ -24,17 +22,27 @@
       />
       <label class="mdl-textfield__label" for="password">Password</label>
     </div>
-    <div>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+    <div class="pt-20 pb-20">
+      <button
+        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored width300"
+      >
         Login
-      </button></div>
+      </button>
+    </div>
   </div>
 </form>
+<div class="pt-20 pb-20">
+  <a href="/register/">
+  <button 
+    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored width300"
+  >
+    Regestration
+  </button>
+</a>
+</div>
 
 {% if wrongpassword %}
 <p class="wrong-password">Password is wrong</p>
 {% endif %}
-
-<div class="registration-link-box">Du bist bisher nicht regestriert? Regestriere dich bitte <a href="/register/">hier</a></div>
 
 {% endblock %}

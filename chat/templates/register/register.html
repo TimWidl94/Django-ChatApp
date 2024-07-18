@@ -20,6 +20,7 @@
         type="text"
         id="username"
         name="username"
+        onkeyup="enableBtn()"
       />
       <label class="mdl-textfield__label" for="username">Username</label>
     </div>
@@ -30,7 +31,7 @@
         type="password"
         id="password"
         name="password1"
-        onkeyup="passwordDontMatch()"
+        onkeyup="passwordDontMatch(), enableBtn()"
         onfocus="showPwReq()"
       />
       <label class="mdl-textfield__label" for="password1">Password</label>
@@ -46,7 +47,7 @@
         type="password"
         id="password_confirm"
         name="password2"
-        onkeyup="passwordDontMatch()"
+        onkeyup="passwordDontMatch(), enableBtn()"
         onfocus="showPwReq()"
       />
       <label class="mdl-textfield__label" for="password2"
@@ -61,12 +62,16 @@
       <h4>Password requirements:</h4>
       <span class="pw-req-text"
         >The password requires at least 9 characters and must not be the same as
-        the user name. <br>The password can’t be a commonly used password. <br>The password can’t be entirely numeric. <br>The password can’t be too similar to the users other personal information.</span
+        the user name. <br />The password can’t be a commonly used password.
+        <br />The password can’t be entirely numeric. <br />The password can’t
+        be too similar to the users other personal information.</span
       >
     </div>
     <div class="submit-btn">
       <button
-        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+        class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored width300"
+        disabled="true"
+        id="registerBtn"
       >
         register
       </button>
@@ -80,8 +85,6 @@
     let dontMatchConfirm = document.getElementById("passwordDontMatchConfirm");
     let password = document.getElementById("password").value;
     let passwordConfirm = document.getElementById("password_confirm").value;
-
-    console.log(password, passwordConfirm);
 
     if (password !== passwordConfirm) {
       dontMatch.classList.remove("d-none");
@@ -104,6 +107,20 @@
       setTimeout(function () {
         container.classList.add("d-none");
       }, 500);
+    }
+  }
+
+  function enableBtn() {
+    let btn = document.getElementById("registerBtn");
+    let username = document.getElementById("username").value;
+    let pw = document.getElementById("password").value;
+    let pw_confirm = document.getElementById("password_confirm").value;
+    console.log(username.length >= 3)
+    console.log()
+    console.log()
+
+    if ((username.length >= 3 && pw == pw_confirm && pw.length >= 9 && pw_confirm.length >= 9)) {
+      btn.disabled = false;
     }
   }
 </script>
